@@ -147,7 +147,7 @@ poly3=Polygon[GeoPosition[listt3]];
 
 
 
-testmap=Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],poly1}],GeoGraphics[{EdgeForm[Blue],FaceForm[Blue],poly2}],GeoGraphics[{EdgeForm[Green],FaceForm[Green],poly3}]];
+testmap=DynamicGeoGraphics[Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],poly1}],GeoGraphics[{EdgeForm[Blue],FaceForm[Blue],poly2}],GeoGraphics[{EdgeForm[Green],FaceForm[Green],poly3}]]];
 
 
-Export["mulpoly.gif",testmap];
+Export["mulpoly.nb",testmap];
