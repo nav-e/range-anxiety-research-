@@ -35,6 +35,6 @@ points = DeleteCases[points[[1;;All]], $Failed];
 markerloc = 
  GeoGraphics[GeoMarker[GeoPosition[{centre[[1]], centre[[2]]}]]];
 
-testmap = DynamicGeoGrapgics[Show[markerloc,GeoGraphics[Style[Line[#],Thick,Red]]&@points[[2;;All]]]];
+testmap = DynamicGeoGraphics[Show[markerloc,GeoGraphics[Style[Line[#],Thick,Red]]&@points[[2;;All]]]];
 
 Export["nearest50routes.nb",testmap];
