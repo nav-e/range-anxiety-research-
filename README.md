@@ -12,7 +12,7 @@ This executes the wolframscript from command prompt.
 
 
 Check installation:
-$ wolframscript -v
+* $ wolframscript -v
 * This returns the Mathematica version that has been installed on your device and enters the Mathematica kernel.  
 * To exit the kernel, type
 $ Quit
@@ -24,11 +24,11 @@ Download:
 Warm-up:
 * Change your current working directory to range-anxiety.
 * To make the .wls scripts executable, you need to set executable permissions. Run the commands given below.
-$ chmod a+x nearest50routes.wls
-$ chmod a+x nearest50poygon.wls
-$ chmod a+x range.wls
-$ chmod a+x mulpol.wls
-$ chmod a+x rangeroutes.wls
+* $ chmod a+x nearest50routes.wls
+* $ chmod a+x nearest50poygon.wls
+* $ chmod a+x range.wls
+* $ chmod a+x mulpol.wls
+* $ chmod a+x rangeroutes.wls
 
 * To see the function of each .wls file, read gsocrep.pdf
 
@@ -36,11 +36,11 @@ Execution:
 * Please note that because of the large quantity of data, the scripts may take a while to produce an output. 
 Please give the scripts sufficient time to run. 
 To run each .wls file, type
-$ ./nearest50routes.wls
-$ ./nearest50poygon.wls
-$ ./range.wls
-$ ./mulpol.wls
-$ ./rangeroutes.wls
+* $ ./nearest50routes.wls
+* $ ./nearest50poygon.wls
+* $ ./range.wls
+* $ ./mulpol.wls
+* $ ./rangeroutes.wls
 
 * In each case, a .gif file is created in the range-anxiety folder.
 
