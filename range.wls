@@ -85,9 +85,9 @@ polygon=Polygon[GeoPosition[listt]];
 markerloc=GeoGraphics[GeoMarker[GeoPosition[{centre[[1]],centre[[2]]}]]];
 
 
-testpolygon=Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],polygon}]];
+testpolygon=DynamicGeoGraphics[Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],polygon}]]];
 
 
 
-Export["range.gif",testpolygon];
+Export["range.nb",testpolygon];
 
