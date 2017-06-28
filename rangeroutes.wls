@@ -50,8 +50,8 @@ markerloc =
   GeoGraphics[GeoMarker[GeoPosition[{centre[[1]], centre[[2]]}]]];
 
 testmap = 
-  Show[markerloc, 
-   GeoGraphics[Style[Line[#], Thick, Red]] &@points[[2 ;; All]]];
+  DynamicGeoGraphics[Show[markerloc, 
+   GeoGraphics[Style[Line[#], Thick, Red]] &@points[[2 ;; All]]]];
 
-Export["20to30rangeroutes.gif", testmap];
+Export["20to30rangeroutes.nb", testmap];
 
