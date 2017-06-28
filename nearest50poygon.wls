@@ -34,7 +34,7 @@ listt={sortlat[[route[[#]]]],sortlon[[route[[#]]]]}&/@Range[1,50];
 polygon=Polygon[GeoPosition[listt]];
 markerloc=GeoGraphics[GeoMarker[GeoPosition[{centre[[1]],centre[[2]]}]]];
 
-testpolygon=DynamicGeoPolygon[Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],polygon}]]];
+testpolygon=DynamicGeoGraphics[Show[markerloc,GeoGraphics[{EdgeForm[Red],FaceForm[Red],polygon}]]];
 
 Export["nearest50polygon.nb",testpolygon];
 
