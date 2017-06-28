@@ -42,5 +42,6 @@ To run each .wls file, type
 * $ ./mulpol.wls
 * $ ./rangeroutes.wls
 
-* In each case, a .gif file is created in the range-anxiety folder.
+* In each case, a Dynamic .nb file is created in the range-anxiety folder.
+* Click on Enable Dynamics in each of these .nb files and you can navigate to different positions in the map.
 
