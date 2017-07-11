@@ -1,10 +1,7 @@
 package com.rangeanxiety.app.service;
 
-import java.io.BufferedInputStream;
-import java.io.File;
+import java.io.*;
 import java.lang.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,9 +11,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Collection;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +29,6 @@ import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.ArrayListMultimap;
 
 
-
 import crosby.binary.osmosis.OsmosisReader;
 import com.rangeanxiety.app.entities.Edge;
 import com.rangeanxiety.app.entities.Vertex;
@@ -44,120 +37,142 @@ import com.rangeanxiety.app.entities.Vertex;
 @Repository
 public class Network {
     private Multimap<Long, Double> ver = ArrayListMultimap.create();
-	
-	private Map<Long, Vertex> vertices = new HashMap<>();
-   
-	private Multimap<Long, Edge> edges = MultimapBuilder.hashKeys().hashSetValues().build();
 
-	
-	public void initialize() throws Exception {
-		readOSMFile("test.osm.pbf");
- // computeEdgeDistances();      
-		
-	}
+    private Map<Long, Vertex> vertices = new HashMap<>();
 
-	private void readOSMFile(String filename) throws FileNotFoundException {
-		// On booting up, load the data from file
-		File testFile = new File(filename);
-		FileInputStream fis = new FileInputStream(testFile);
-		BufferedInputStream bis = new BufferedInputStream(fis);
-		OsmosisReader reader = new OsmosisReader(bis);
+    private Multimap<Long, Edge> edges = MultimapBuilder.hashKeys().hashSetValues().build();
+
+
+    public void initialize() throws Exception {
+        readOSMFile("test.osm.pbf");
+        // computeEdgeDistances();
+
+    }
+
+    private void readOSMFile(String filename) throws FileNotFoundException {
+        // On booting up, load the data from file
+        File testFile = new File(filename);
+        FileInputStream fis = new FileInputStream(testFile);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        OsmosisReader reader = new OsmosisReader(bis);
         // The sink serves as a callback, reacting on any nodes and ways found
-		reader.setSink(new Sink() {
+        reader.setSink(new Sink() {
 
-			@Override
-			public void initialize(Map<String, Object> arg0) {
-				// do nothing
-			}
+            @Override
+            public void initialize(Map<String, Object> arg0) {
+                // do nothing
+            }
 
-			@Override
-			public void process(EntityContainer entityContainer) {
-				Entity entity = entityContainer.getEntity();
-				switch (entity.getType()) {
-				case Node:
-					Node node = (Node) entity;
-					ver.put(node.getId(),node.getLatitude()) ; 
-					ver.put(node.getId(),node.getLongitude());
-					
-					
-				vertices.put(node.getId(), new Vertex(node.getLatitude(), node.getLongitude()));
-                        
-					break;
-				case Way:
-					Way way = (Way) entity;
-					List<WayNode> nodes = way.getWayNodes();
-                        
-					for (int i = 1; i < nodes.size(); i++) {
-                        
-						long from = nodes.get(i - 1).getNodeId();
-                        
-						long to = nodes.get(i).getNodeId();
-                        
-						edges.put(from, new Edge(Double.POSITIVE_INFINITY, to));
-                        
-						edges.put(to, new Edge(Double.POSITIVE_INFINITY, from));
-					}
-                        
-					break;
-				default:
-					break;
-				}
+            @Override
+            public void process(EntityContainer entityContainer) {
+                Entity entity = entityContainer.getEntity();
+                switch (entity.getType()) {
+                    case Node:
+                        Node node = (Node) entity;
+                        ver.put(node.getId(), node.getLatitude());
+                        ver.put(node.getId(), node.getLongitude());
 
-			}
 
-			@Override
-			public void complete() {
-				// do nothing
-			}
+                        vertices.put(node.getId(), new Vertex(node.getLatitude(), node.getLongitude()));
 
-			@Override
-			public void release() {
-				// do nothing
-			}
+                        break;
+                    case Way:
+                        Way way = (Way) entity;
+                        List<WayNode> nodes = way.getWayNodes();
 
-		});
-		reader.run();
+                        for (int i = 1; i < nodes.size(); i++) {
+
+                            long from = nodes.get(i - 1).getNodeId();
+
+                            long to = nodes.get(i).getNodeId();
+
+                            edges.put(from, new Edge(Double.POSITIVE_INFINITY, to));
+
+                            edges.put(to, new Edge(Double.POSITIVE_INFINITY, from));
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            @Override
+            public void complete() {
+                // do nothing
+            }
+
+            @Override
+            public void release() {
+                // do nothing
+            }
+
+        });
+        reader.run();
     }
 
-	
-	public long[] get50RandomVertexId() {
-        Random   random    = new Random();
-        List<Long> keys     = new ArrayList<Long>(ver.keySet());
-        long arr[] = new long[50];int i;
-        System.out.println("To be converted to Json/GeoJson" );
-        for(i=0; i<50; i++)
-        {
-       long  randomKey = keys.get( random.nextInt(keys.size()) );
-        System.out.println("i "+i+"  "+"key"+" " +randomKey+"  "+"value" +ver.get(randomKey));
-        arr[i]=randomKey;
-        
-        
-    }
-    
-    return (arr);
-        
-	}
-	
-	public long getRandomVertexId() {
-	 Random   random    = new Random();
-    List<Long> keys     = new ArrayList<Long>(ver.keySet());
-    long  randomKey = keys.get( random.nextInt(keys.size()) );
-    return randomKey;
-	}
-	
-	
-    public void converttoJson(long arr[]) throws Exception
-    
-    {Writer writer = new FileWriter("Output.json");
-Gson gson = new GsonBuilder().create();
-    for(int i=0;i<50;i++){
-    
-         gson.toJson(arr[i]+": "+ver.get(arr[i]), writer);
 
-         }
-          writer.close();
+    public long[] get50RandomVertexId() {
+        Random random = new Random();
+        List<Long> keys = new ArrayList<Long>(ver.keySet());
+        long arr[] = new long[50];
+        int i;
+        System.out.println("To be converted to Json/GeoJson");
+        for (i = 0; i < 50; i++) {
+            long randomKey = keys.get(random.nextInt(keys.size()));
+            System.out.println("i " + i + "  " + "key" + " " + randomKey + "  " + "value" + ver.get(randomKey));
+            arr[i] = randomKey;
+
+
+        }
+
+        return (arr);
+
     }
-    
-  
+
+    public long getRandomVertexId() {
+        Random random = new Random();
+        List<Long> keys = new ArrayList<Long>(ver.keySet());
+        long randomKey = keys.get(random.nextInt(keys.size()));
+        return randomKey;
+    }
+
+
+    public void converttoJson(long arr[]) throws Exception {
+
+        List<DataObject> objList = new ArrayList<DataObject>();
+
+        for (int i = 0; i < 50; i++) {
+            objList.add(new DataObject( arr[i], ver.get(arr[i])) );
+        }
+
+        String json = new Gson().toJson(objList);
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter("Output.json"));
+            writer.write(json);
+
+        } catch (IOException e) {
+        } finally {
+            try {
+                if (writer != null)
+                    writer.close();
+            } catch (IOException e) {
+            }
+        }
+
+    }
+
+    private static class DataObject {
+        private long key;
+        private Collection<Double> coordinates;
+
+        public DataObject(long key, Collection<Double> coordinates) {
+            this.key = key;
+            this.coordinates = coordinates;
+        }
+    }
 
 }
