@@ -1,2 +1,2 @@
-# Range-Anxiety
+# range-anxiety
 Computation and visualization of the vehicles range
