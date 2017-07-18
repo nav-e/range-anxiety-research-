@@ -11,9 +11,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Collection;
+import java.util.Iterator;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
@@ -35,21 +35,20 @@ import com.google.common.collect.ArrayListMultimap;
 import crosby.binary.osmosis.OsmosisReader;
 import com.rangeanxiety.app.entities.Edge;
 import com.rangeanxiety.app.entities.Vertex;
+import com.rangeanxiety.app.entities.Haversine;
 
 
 @Repository
 public class Network {
     private Multimap<Long, Double> ver = ArrayListMultimap.create();
     
-     
-    private Map<Long, Vertex> vertices = new HashMap<>();
-
+//Not using this as of yet.
     private Multimap<Long, Edge> edges = MultimapBuilder.hashKeys().hashSetValues().build();
 
 
     public void initialize() throws Exception {
         readOSMFile("test.osm.pbf");
-        // computeEdgeDistances();
+         //computeEdgeDistances();
 
     }
 
@@ -74,11 +73,12 @@ public class Network {
                 switch (entity.getType()) {
                     case Node:
                         Node node = (Node) entity;
+                        
                         ver.put(node.getId(), node.getLatitude());
                         ver.put(node.getId(), node.getLongitude());
 
 
-                        vertices.put(node.getId(), new Vertex(node.getLatitude(), node.getLongitude()));
+                        
 
                         break;
                     case Way:
@@ -120,41 +120,77 @@ public class Network {
     }
 
 
-    public String get50RandomVertexId() {
+    public void get1000RandomVertexId() {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(ver.keySet());
-        long arr[] = new long[50];
-        String nodes="";
+        long arr[] = new long[1000];
         int i;
-        System.out.println("To be converted to Json/GeoJson");
-        for (i = 0; i < 50; i++) {
+        
+        for (i = 0; i < 1000; i++) {
             long randomKey = keys.get(random.nextInt(keys.size()));
-            System.out.println("i " + i + "  " + "key" + " " + randomKey + "  " + "value" + ver.get(randomKey));
+            //System.out.println("i " + i + "  " + "key" + " " + randomKey + "  " + "value" + ver.get(randomKey));
             arr[i] = randomKey;
-            nodes=nodes+" "+ver.get(randomKey);
-            nodes=nodes+",";
-
+ 
 
         }
-try {
-    converttoJSON(arr) ;
-} catch (Exception e) {
-    e.printStackTrace();
-}
-        return (nodes);
+        long source= getRandomVertexId();
+;
+
+getnodes(arr, source);
 
     }
 
-   
- public long getRandomVertexId()  {
+    public long getRandomVertexId() {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(ver.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
+        
         return randomKey;
     }
-    
-    
-    public void converttoJSON(long arr[])throws Exception
+public void getnodes(long arr[], long source)
+
+{ Haversine hav =new Haversine();  
+long key[]=new long[1000];
+double lat1,lon1;
+Collection<Double> values = ver.get(source);
+lat1=values.iterator().next();
+System.out.println("Source lat "+ lat1);
+Iterator<Double> it = values.iterator();
+it.next(); 
+lon1=it.next();
+System.out.println("Source lon "+ lon1);
+int count=0;
+double lat2 , lon2;
+//Not a very clean code.
+for (int i = 0; i < 1000; i++) {
+   Collection<Double> coor = ver.get(arr[i]);
+     lat2=coor.iterator().next(); 
+     Iterator<Double> iter = coor.iterator();
+iter.next(); 
+lon2=iter.next();
+double checkdis=hav.Havdistance(lat1, lon1, lat2, lon2);
+if (checkdis>20)
+{key[count]= arr[i];
+System.out.println(lat2+" "+lon2+" "+checkdis);
+count++;
+}
+
+
+     }  
+     // System.out.println("count "+count); 
+      try {
+     converttoJSON(key, count) ;
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+        }
+        
+        
+
+
+   
+    public void converttoJSON(long arr[], int count)throws Exception
     {
     
   
@@ -166,7 +202,7 @@ JSONArray coor = new JSONArray();
 JSONArray brac = new JSONArray();
 JSONObject geometry = new JSONObject();
 geometry.put("type", "Polygon");
-for (int i = 0; i < 50; i++) {
+for (int i = 0; i <= count; i++) {
             coor.add(ver.get(arr[i]));
             
             }
@@ -178,18 +214,18 @@ features.add(feature);
 featureCollection.put("features",features);
 
     
+      FileWriter file = new FileWriter("output.geoJSON");
       
-      
-       FileWriter file = new FileWriter("output.geoJSON");
-        try {
+      try {
 			file.write(featureCollection.toJSONString());
 			System.out.println("Successfully Copied JSON Object to File...");}
 			catch(IOException e){e.printStackTrace();}
 			finally {file.flush();
 			file.close();}
-
-      
-     
     }
   
+    
+
+
+   
 }
