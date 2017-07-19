@@ -124,18 +124,24 @@ public class Network {
     public String get1000RandomVertexId(double lat, double lng) {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(ver.keySet());
+
         long arr[] = new long[1000];
         
         int i;
         
         String result=null;
         for (i = 0; i < 1000; i++) {
+
+
             long randomKey = keys.get(random.nextInt(keys.size()));
             //System.out.println("i " + i + "  " + "key" + " " + randomKey + "  " + "value" + ver.get(randomKey));
             arr[i] = randomKey;
         }
         try {
+
             result = getnodes(arr,lat,lng);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -152,6 +158,7 @@ public class Network {
         lat = coor.iterator().next();
         return lat;
     }
+
 
     public double getRandomLon() {
         double lat, lon;
@@ -198,12 +205,16 @@ count++;
 return result;
         }
 
+
+
+
     public long getRandomVertexId() {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(ver.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
         return randomKey;
     }
+
 
 
     public String converttoJSON(long arr[],  int count) throws Exception {
@@ -216,7 +227,10 @@ return result;
         JSONArray brac = new JSONArray();
         JSONObject geometry = new JSONObject();
         geometry.put("type", "Polygon");
+
         for (int i = 0; i < count; i++) {
+
+
             coor.add(ver.get(arr[i]));
 
         }

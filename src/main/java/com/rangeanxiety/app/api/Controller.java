@@ -34,16 +34,16 @@ public class Controller {
         }
 
         if (range == null) {
+
             range = 20d;
         }
 
         String result;
         result = network.get1000RandomVertexId(startlat,startlng);
 
-        return result;
-
     }
 }
+
         
         
 	
