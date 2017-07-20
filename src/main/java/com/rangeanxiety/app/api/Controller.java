@@ -35,7 +35,7 @@ public class Controller {
 
         if (range == null) {
 
-            range = 20d;
+            range = 5d;
         }
 
         String result;

@@ -205,7 +205,7 @@ for (int i = 0; i < 1000; i++) {
      lat2=getLat(arr[i]); 
      lon2=getLon(arr[i]);
 double checkdis=hav.Havdistance(lat1, lon1, lat2, lon2);
-if (checkdis>1)
+if (checkdis>5)
 {key[count]= arr[i];
 System.out.println("Latitude "+lat2+" Longitude "+lon2+" Distance "+checkdis);
 count++;
