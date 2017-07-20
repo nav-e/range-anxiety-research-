@@ -39,7 +39,8 @@ public class Controller {
         }
 
         String result;
-        result = network.get1000RandomVertexId(startlat,startlng);
+        result = network.getnodes(startlat,startlng);
+        return result;
 
     }
 }
