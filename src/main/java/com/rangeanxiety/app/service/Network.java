@@ -140,7 +140,7 @@ public class Network {
 
 
             long randomKey = keys.get(random.nextInt(keys.size()));
-            //System.out.println("i " + i + "  " + "key" + " " + randomKey + "  " + "value" + ver.get(randomKey));
+            
             arr[i] = randomKey;
         }
         
@@ -196,7 +196,7 @@ arr=get1000RandomVertexId();
 
 double lat1,lon1;
 lat1=lat;lon1=lng;
-System.out.println("source lat "+lat1+" Source lon "+lon1);
+
 
  count=0;
 double lat2 , lon2;
@@ -207,7 +207,7 @@ for (int i = 0; i < 1000; i++) {
 double checkdis=hav.Havdistance(lat1, lon1, lat2, lon2);
 if (checkdis>5)
 {key[count]= arr[i];
-System.out.println("Latitude "+lat2+" Longitude "+lon2+" Distance "+checkdis);
+
 count++;
 }
  }
@@ -245,6 +245,7 @@ else {lat2=getLat(arr[j]);
 }
 }
 //Call and pass DistanceMatrix to TravellingSalesman;
+
 try {
     result=TravellingSalesman(DistanceMatrix, arr) ;
 } catch (Exception e) {
@@ -255,9 +256,13 @@ return result;
 }
 
 public String TravellingSalesman(double DistanceMatrix[][], long arr[])
-{ Stack<Integer> stack= new Stack<Integer>();
-
+{
+Stack<Integer> stack= new Stack<Integer>();
+long newarr[]=new long[count];
+newarr[0]=arr[0];
 int[] visited = new int[count];
+for(int i=0;i<count;i++)
+{visited[i]=0;}
         int keycount=1;
         String result=null;
         visited[0] = 1;
@@ -265,7 +270,7 @@ int[] visited = new int[count];
         int element, dst = 0, i;
         double min = Integer.MAX_VALUE;
         boolean minFlag = false;
-        long swap;
+        
  
         while (!stack.isEmpty())
         {
@@ -288,21 +293,21 @@ int[] visited = new int[count];
             if (minFlag)
             {
                 visited[dst] = 1;
+                
+                newarr[keycount]=arr[dst];
                 stack.push(dst);
-                swap=arr[keycount];
-                arr[keycount]=arr[dst];
-                arr[dst]=swap;
+                
                 keycount++;
                 minFlag = false;
                 continue;
             }
             stack.pop();
         }
-
-
+        
+    
 
 try {
-     result=converttoJSON(arr) ;
+     result=converttoJSON(newarr) ;
 } catch (Exception e) {
     e.printStackTrace();
 }
