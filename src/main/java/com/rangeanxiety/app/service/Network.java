@@ -13,18 +13,15 @@ import java.util.stream.Collectors;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Stack;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 
-import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
-import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
-import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-import org.openstreetmap.osmosis.core.domain.v0_6.Way;
-import org.openstreetmap.osmosis.core.domain.v0_6.WayNode;
-import org.openstreetmap.osmosis.core.task.v0_6.Sink;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +30,7 @@ import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.ArrayListMultimap;
 
 
-import crosby.binary.osmosis.OsmosisReader;
+
 import com.rangeanxiety.app.entities.Edge;
 import com.rangeanxiety.app.entities.Vertex;
 import com.rangeanxiety.app.entities.Haversine;
@@ -44,122 +41,77 @@ import com.rangeanxiety.app.entities.Haversine;
 public class Network {
     private Multimap<Long, Double> ver = ArrayListMultimap.create();
 
-    long Key; int count;
+    long Key; int count,size=48206; long c=0;
+    
     
     Haversine hav =new Haversine(); 
     
     
-    private Map<Long, Vertex> vertices = new HashMap<>();
-
-    private Multimap<Long, Edge> edges = MultimapBuilder.hashKeys().hashSetValues().build();
 
 
     public void initialize() throws Exception {
-        readOSMFile("test.osm.pbf");
+        
+        readCSVFile();
        
 
     }
 
-    private void readOSMFile(String filename) throws FileNotFoundException {
-        // On booting up, load the data from file
-        File testFile = new File(filename);
-        FileInputStream fis = new FileInputStream(testFile);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-        OsmosisReader reader = new OsmosisReader(bis);
-        // The sink serves as a callback, reacting on any nodes and ways found
-        reader.setSink(new Sink() {
+    private void readCSVFile() throws FileNotFoundException {
+    int i=0;
+    String csvFile = "uk-towns.csv";
+        String line = "";
+        String cvsSplitBy = ",";
 
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
-            @Override
-            public void initialize(Map<String, Object> arg0) {
-                // do nothing
-            }
-
-            @Override
-            public void process(EntityContainer entityContainer) {
-                Entity entity = entityContainer.getEntity();
-                switch (entity.getType()) {
-                    case Node:
-                        Node node = (Node) entity;
-                        ver.put(node.getId(), node.getLatitude());
-                        ver.put(node.getId(), node.getLongitude());
-
-
-                        vertices.put(node.getId(), new Vertex(node.getLatitude(), node.getLongitude()));
-
-                        break;
-                    case Way:
-                        Way way = (Way) entity;
-                        List<WayNode> nodes = way.getWayNodes();
-
-                        for (int i = 1; i < nodes.size(); i++) {
-
-                            long from = nodes.get(i - 1).getNodeId();
-
-                            long to = nodes.get(i).getNodeId();
-
-                            edges.put(from, new Edge(Double.POSITIVE_INFINITY, to));
-
-                            edges.put(to, new Edge(Double.POSITIVE_INFINITY, from));
-
-
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-
-            @Override
-            public void complete() {
-                // do nothing
-            }
-
-            @Override
-            public void release() {
-                // do nothing
-            }
-
-        });
-        reader.run();
-    }
-
-
-    public long[] get1000RandomVertexId() {
-        Random random = new Random();
-        List<Long> keys = new ArrayList<Long>(ver.keySet());
-
-        long arr[] = new long[1000];
-        
-        int i;
-        
-        String result=null;
-        for (i = 0; i < 1000; i++) {
-
-
-            long randomKey = keys.get(random.nextInt(keys.size()));
+            while ((line = br.readLine()) != null) {
             
-            arr[i] = randomKey;
+            if (i==0)
+                {i=99;
+                continue;}
+                else{
+
+                // use comma as separator
+                String[] country = line.split(cvsSplitBy);
+try{
+              ver.put(c, Double.parseDouble(country[7]));
+              ver.put(c, Double.parseDouble(country[8]));
+              
+              c++;
+              }
+              catch(NumberFormatException e){
+
+              e.printStackTrace();}
+
+            }
+
+        }} catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        return arr;
+
+    
+    
     }
+        
+
+
+  
 
     public double getRandomLat() {
+        
         double lat;
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(ver.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
         Key = randomKey;
-        Collection<Double> coor = ver.get(randomKey);
+        Collection<Double> coor = ver.get(Key);
         lat = coor.iterator().next();
         return lat;
     }
 
 
     public double getRandomLon() {
+   
         double lat, lon;
        Collection<Double> coor = ver.get(Key);
         lat = coor.iterator().next();
@@ -189,10 +141,12 @@ public class Network {
 //Call getnodes
 public String  getnodes(double lat, double lng)
 
-{long arr[]=new long[1000];
-long key[]=new long[1000];
+{System.out.println("Source lat "+lat+" Source lon "+lng);
+System.out.println("c "+c);
+
+long key[]=new long[size];
 String result=null;
-arr=get1000RandomVertexId();
+
 
 double lat1,lon1;
 lat1=lat;lon1=lng;
@@ -201,12 +155,12 @@ lat1=lat;lon1=lng;
  count=0;
 double lat2 , lon2;
 
-for (int i = 0; i < 1000; i++) {
-     lat2=getLat(arr[i]); 
-     lon2=getLon(arr[i]);
+for (int i = 0; i < c; i++) {
+     lat2=getLat(i); 
+     lon2=getLon(i);
 double checkdis=hav.Havdistance(lat1, lon1, lat2, lon2);
-if (checkdis>5)
-{key[count]= arr[i];
+if ((checkdis>10.5)&&(checkdis<11))
+{key[count]= i;
 
 count++;
 }
@@ -257,6 +211,8 @@ return result;
 
 public String TravellingSalesman(double DistanceMatrix[][], long arr[])
 {
+
+
 Stack<Integer> stack= new Stack<Integer>();
 long newarr[]=new long[count];
 newarr[0]=arr[0];
@@ -304,10 +260,10 @@ for(int i=0;i<count;i++)
             stack.pop();
         }
         
-    
+   
 
 try {
-     result=converttoJSON(newarr) ;
+     result=converttoJSONpolygon(newarr) ;
 } catch (Exception e) {
     e.printStackTrace();
 }
@@ -317,7 +273,7 @@ return result;
 
 
 
-    public String converttoJSON(long arr[]) throws Exception {
+    public String converttoJSONpolygon(long arr[]) throws Exception {
 
         JSONObject featureCollection = new JSONObject();
         JSONArray features = new JSONArray();
@@ -339,6 +295,33 @@ return result;
         geometry.put("coordinates", brac);
         feature.put("geometry", geometry);
         features.add(feature);
+        featureCollection.put("features", features);
+
+        return featureCollection.toJSONString();
+
+    }
+
+   public String converttoJSONmarker(long arr[]) throws Exception {
+
+        JSONObject featureCollection = new JSONObject();
+        JSONArray features = new JSONArray();
+        for (int i = 0; i < count; i++) {
+        
+        JSONObject feature = new JSONObject();
+        
+        JSONObject geometry = new JSONObject();
+        feature.put("type", "Feature");
+        geometry.put("type", "Point");
+       
+        geometry.put("coordinates", ver.get(arr[i]));
+        feature.put("geometry", geometry);
+        features.add(feature);
+        }
+
+        
+        
+        
+        
         featureCollection.put("features", features);
 
         return featureCollection.toJSONString();
