@@ -4,7 +4,7 @@ $ mvn compile
 
 $ mvn package
 
-Drag and Drop the 'uk-towns.csv' file in the target folder.
+Drag and Drop the 'uk-towns.csv' file to the target folder.
 
 $ java -jar range-1.0-SNAPSHOT.jar.
 
