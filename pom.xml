@@ -47,6 +47,11 @@
 			<version>22.0</version>
 		</dependency>
 		<dependency>
+  <groupId>org.openstreetmap.osmosis</groupId>
+  <artifactId>osmosis-areafilter</artifactId>
+  <version>0.43-RELEASE</version>
+</dependency>
+		<dependency>
 			<groupId>org.openstreetmap.osmosis</groupId>
 			<artifactId>osmosis-pbf</artifactId>
 			<version>0.43-RELEASE</version>
