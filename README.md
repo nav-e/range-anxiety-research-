@@ -1,7 +1,7 @@
 # range-anxiety
 Computation and visualization of the vehicle's range
 
-# Execute the following commands to get a JSON output that lists the nodes forming the edges of a polygon.
+Execute the following commands to get a JSON output that lists the nodes forming the edges of a polygon.
  
 Clone and navigate to the directory range-anxiety.
 
