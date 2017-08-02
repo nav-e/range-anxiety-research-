@@ -27,7 +27,7 @@
                         feature.put("type", "Feature");
                         geometry.put("type", "Point");
 
-                        geometry.put("coordinates", network.ver.get(arr[i]));
+                        geometry.put("coordinates", network.vertices.get(arr[i]));
                         feature.put("geometry", geometry);
                         features.add(feature);
                         }

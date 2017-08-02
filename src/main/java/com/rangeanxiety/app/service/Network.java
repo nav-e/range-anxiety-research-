@@ -11,12 +11,11 @@
                 import java.util.Iterator;
                 import java.util.Stack;
 
-                import org.openstreetmap.osmosis.core.container.v0_6.EntityContainer;
-                import org.openstreetmap.osmosis.core.domain.v0_6.Entity;
-                import org.openstreetmap.osmosis.core.domain.v0_6.Node;
-                import org.openstreetmap.osmosis.core.task.v0_6.Sink;
+                
                 import org.springframework.beans.factory.annotation.Autowired;
                 import org.springframework.stereotype.Repository;
+                import de.topobyte.osm4j.pbf.seq.PbfReader;
+                import de.topobyte.osm4j.core.access.OsmInputException;
 
 
 
@@ -24,18 +23,21 @@
                 import com.google.common.collect.ArrayListMultimap;
 
 
-                import crosby.binary.osmosis.OsmosisReader;
+                
                 import com.rangeanxiety.app.api.Polygon;
                 import com.rangeanxiety.app.api.Marker;
                 import com.rangeanxiety.app.entities.Vertex;
                 import com.rangeanxiety.app.helper.Haversine;
+                import com.rangeanxiety.app.persistence.Persistence;
+                import com.rangeanxiety.app.persistence.InMemoryPersistence;
+                import com.rangeanxiety.app.persistence.PersistingOsmHandler;
 
 
 
 
                 @Repository
                 public class Network {
-                    public Multimap<Long, Double> ver = ArrayListMultimap.create();
+                    public Multimap<Long, Double> vertices = ArrayListMultimap.create();
 
                     long vertexKey; int count,nodecount=0;
 
@@ -45,64 +47,42 @@
                     Polygon polygon;
                     @Autowired
                     Marker marker;
+                    @Autowired
+                    PbfReader reader;
+                    @Autowired
+                    PersistingOsmHandler handler;
+                    
 
-                    private Map<Long, Vertex> vertices = new HashMap<>();
 
+                   
 
-                    public void initialize() throws Exception {
-                        readOSMFile("test.osm.pbf");
-
-
-                    }
-
-                    private void readOSMFile(String filename) throws FileNotFoundException {
+                        public void readOSMFile() throws FileNotFoundException {
+                        String filename="test.osm.pbf";
                         // On booting up, load the data from file
-                        File testFile = new File(filename);
-                        FileInputStream fis = new FileInputStream(testFile);
-                        BufferedInputStream bis = new BufferedInputStream(fis);
-                        OsmosisReader reader = new OsmosisReader(bis);
+                        reader = new PbfReader(filename, false);
+                        //File testFile = new File(filename);
+                        //FileInputStream fis = new FileInputStream(testFile);
+                        //BufferedInputStream bis = new BufferedInputStream(fis);
+                        //OsmosisReader reader = new OsmosisReader(bis);
+                        Persistence db = new InMemoryPersistence();
                         // The sink serves as a callback, reacting on any nodes and ways found
-
-                   reader.setSink(new Sink() {
-
-
-                            @Override
-                            public void initialize(Map<String, Object> arg0) {
-                                // do nothing
-                            }
-
-                            @Override
-                            public void process(EntityContainer entityContainer) {
-                                Entity entity = entityContainer.getEntity();
-                                 if (entity instanceof Node) {
-                            Node node = (Node) entity;
-
-                                        ver.put(node.getId(), node.getLatitude());
-                                        ver.put(node.getId(), node.getLongitude());
-                                        nodecount++;
-
-                        }
-
-                            }
-
-                            @Override
-                            public void complete() {
-                                // do nothing
-                            }
-
-                            @Override
-                            public void release() {
-                                // do nothing
-                            }
-
-                        });
-                        reader.run();
+                        
+                        
+                       handler = new PersistingOsmHandler(db);
+                       reader.setHandler(handler);
+                       try{  reader.read();
+                        nodecount=handler.numNodes;
+                        vertices=handler.ver;
+                        }catch(OsmInputException e){}
+                   
+                   
+                   
                     }
 
 
                     public long[] getRandomVertexId() {
                         Random random = new Random();
-                        List<Long> keys = new ArrayList<Long>(ver.keySet());
+                        List<Long> keys = new ArrayList<Long>(vertices.keySet());
 
                         long arr[] = new long[nodecount];
 
@@ -124,10 +104,10 @@
 
                         double lat;
                         Random random = new Random();
-                        List<Long> keys = new ArrayList<Long>(ver.keySet());
+                        List<Long> keys = new ArrayList<Long>(vertices.keySet());
                         long randomKey = keys.get(random.nextInt(keys.size()));
                         vertexKey = randomKey;
-                        Collection<Double> coor = ver.get(vertexKey);
+                        Collection<Double> coor = vertices.get(vertexKey);
                         lat = coor.iterator().next();
 
                         return lat;
@@ -137,7 +117,7 @@
                     public double getRandomLon() {
 
                         double lat, lon;
-                       Collection<Double> coor = ver.get(vertexKey);
+                       Collection<Double> coor = vertices.get(vertexKey);
                         lat = coor.iterator().next();
                         Iterator<Double> iter = coor.iterator();
                         iter.next();
@@ -148,14 +128,14 @@
 
                      public double getLat(long key) {
                         double lat;
-                        Collection<Double> coor = ver.get(key);
+                        Collection<Double> coor = vertices.get(key);
                         lat=coor.iterator().next();
                         return lat;
                     }
 
                      public double getLon(long key) {
                      double lon,lat;
-                     Collection<Double> coor = ver.get(key);
+                     Collection<Double> coor = vertices.get(key);
                      lat=coor.iterator().next();
                      Iterator<Double> iter = coor.iterator();
                      iter.next();

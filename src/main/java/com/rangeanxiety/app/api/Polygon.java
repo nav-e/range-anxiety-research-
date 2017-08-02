@@ -30,7 +30,7 @@
                             for (int i = 0; i < count; i++) {
 
 
-                                coor.add(network.ver.get(arr[i]));
+                                coor.add(network.vertices.get(arr[i]));
 
                             }
 
