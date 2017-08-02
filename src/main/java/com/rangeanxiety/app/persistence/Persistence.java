@@ -3,6 +3,7 @@ package com.rangeanxiety.app.persistence;
 import de.topobyte.osm4j.core.model.impl.Node;
 import de.topobyte.osm4j.core.model.impl.Relation;
 import de.topobyte.osm4j.core.model.impl.Way;
+
 import java.util.Collection;
 import java.util.Set;
 

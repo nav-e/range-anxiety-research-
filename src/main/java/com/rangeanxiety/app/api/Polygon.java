@@ -1,49 +1,49 @@
-            package com.rangeanxiety.app.api;
+package com.rangeanxiety.app.api;
 
-            import com.rangeanxiety.app.service.Network;
-            import org.springframework.stereotype.Repository;
-            import org.springframework.beans.factory.annotation.Autowired;
-            import org.json.simple.JSONObject;
-            import org.json.simple.JSONArray;
-
-
-            @Repository
-            public class Polygon {
+import com.rangeanxiety.app.service.Network;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 
-                        @Autowired
-                        Network network;
+@Repository
+public class Polygon {
 
 
-                        public String convertToJSONpolygon(long arr[], int count)  {
+    @Autowired
+    Network network;
 
 
-                            JSONObject featureCollection = new JSONObject();
-                            JSONArray features = new JSONArray();
-                            JSONObject feature = new JSONObject();
-                            feature.put("type", "Features");
-                            JSONArray coor = new JSONArray();
-                            JSONArray brac = new JSONArray();
-                            JSONObject geometry = new JSONObject();
-                            geometry.put("type", "Polygon");
-
-                            for (int i = 0; i < count; i++) {
+    public String convertToJSONpolygon(long arr[], int count) {
 
 
-                                coor.add(network.vertices.get(arr[i]));
+        JSONObject featureCollection = new JSONObject();
+        JSONArray features = new JSONArray();
+        JSONObject feature = new JSONObject();
+        feature.put("type", "Features");
+        JSONArray coor = new JSONArray();
+        JSONArray brac = new JSONArray();
+        JSONObject geometry = new JSONObject();
+        geometry.put("type", "Polygon");
 
-                            }
-
-                            brac.add(coor);
-                            geometry.put("coordinates", brac);
-                            feature.put("geometry", geometry);
-                            features.add(feature);
-                            featureCollection.put("features", features);
-
-                            return featureCollection.toJSONString();
-
-                        }
+        for (int i = 0; i < count; i++) {
 
 
-            }
+            coor.add(network.vertices.get(arr[i]));
+
+        }
+
+        brac.add(coor);
+        geometry.put("coordinates", brac);
+        feature.put("geometry", geometry);
+        features.add(feature);
+        featureCollection.put("features", features);
+
+        return featureCollection.toJSONString();
+
+    }
+
+
+}
 
