@@ -1,46 +1,43 @@
-            package com.rangeanxiety.app.api;
+package com.rangeanxiety.app.api;
 
-            import com.rangeanxiety.app.service.Network;
-            import org.springframework.stereotype.Repository;
-            import org.springframework.beans.factory.annotation.Autowired;
-            import org.json.simple.JSONObject;
-            import org.json.simple.JSONArray;
-
-
-            @Repository
-            public class Marker {
+import com.rangeanxiety.app.service.Network;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 
-                        @Autowired
-                        Network network;
+@Repository
+public class Marker {
 
 
-                        public String convertToJSONmarker(long arr[],int count)  {
-
-                        JSONObject featureCollection = new JSONObject();
-                        JSONArray features = new JSONArray();
-                        for (int i = 0; i < count; i++) {
-
-                        JSONObject feature = new JSONObject();
-
-                        JSONObject geometry = new JSONObject();
-                        feature.put("type", "Feature");
-                        geometry.put("type", "Point");
-
-                        geometry.put("coordinates", network.ver.get(arr[i]));
-                        feature.put("geometry", geometry);
-                        features.add(feature);
-                        }
+    @Autowired
+    Network network;
 
 
+    public String convertToJSONmarker(long arr[], int count) {
+
+        JSONObject featureCollection = new JSONObject();
+        JSONArray features = new JSONArray();
+        for (int i = 0; i < count; i++) {
+
+            JSONObject feature = new JSONObject();
+
+            JSONObject geometry = new JSONObject();
+            feature.put("type", "Feature");
+            geometry.put("type", "Point");
+
+            geometry.put("coordinates", network.vertices.get(arr[i]));
+            feature.put("geometry", geometry);
+            features.add(feature);
+        }
 
 
+        featureCollection.put("features", features);
 
-                        featureCollection.put("features", features);
+        return featureCollection.toJSONString();
 
-                        return featureCollection.toJSONString();
+    }
 
-                    }
-
-            }
+}
 
