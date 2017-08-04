@@ -9,14 +9,16 @@ $ mvn package
 
 $ cd target
 
-Download a '.osm.pbf' file from 'http://download.geofabrik.de', rename the file to 'test.osm.pbf' and place it in the target directory.
+Move the Jordan.osm.pbf file to the target folder.
 
 $ java -jar range-1.0-SNAPSHOT.jar
 
+Working Example:
+
 To get the polygon format,
-navigate to 'localhost:8111/greennav/range/polygon' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
+navigate to 'http://localhost:8111/greennav/polygon?startlat=31.7239898&startlng=35.6429683&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
 
 To get the marker format,
-navigate to 'localhost:8111/greennav/range/marker' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
+navigate to 'http://localhost:8111/greennav/marker?startlat=31.7239898&startlng=35.6429683&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
 
-For more details, read 'gsoc2.pdf'. 
+For more details, read 'results2.pdf'. 

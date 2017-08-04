@@ -33,17 +33,15 @@ public class Network {
     private int count, nodecount = 0;
     private PbfReader reader;
     private PersistingOsmHandler handler;
+    
 
     public void readOSMFile() throws FileNotFoundException {
-        String filename = "test.osm.pbf";
-        // On booting up, load the data from file
+        String filename = "Jordan.osm.pbf";
+        
         reader = new PbfReader(filename, false);
-        //File testFile = new File(filename);
-        //FileInputStream fis = new FileInputStream(testFile);
-        //BufferedInputStream bis = new BufferedInputStream(fis);
-        //OsmosisReader reader = new OsmosisReader(bis);
+        
         Persistence db = new InMemoryPersistence();
-        // The sink serves as a callback, reacting on any nodes and ways found
+       
 
         handler = new PersistingOsmHandler(db);
         reader.setHandler(handler);
@@ -51,6 +49,7 @@ public class Network {
             reader.read();
             nodecount = handler.numNodes;
             vertices = handler.ver;
+            
         } catch (OsmInputException e) {
         }
 
@@ -78,10 +77,11 @@ public class Network {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(vertices.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
+        System.out.println("Random key "+randomKey);
         vertexKey = randomKey;
         Collection<Double> coor = vertices.get(vertexKey);
         lat = coor.iterator().next();
-
+        System.out.println("Latitude "+lat);
         return lat;
     }
 
@@ -94,6 +94,7 @@ public class Network {
         Iterator<Double> iter = coor.iterator();
         iter.next();
         lon = iter.next();
+        System.out.println("Longitude "+lon);
 
         return lon;
     }
@@ -102,6 +103,7 @@ public class Network {
         double lat;
         Collection<Double> coor = vertices.get(key);
         lat = coor.iterator().next();
+        
         return lat;
     }
 
@@ -116,7 +118,7 @@ public class Network {
     }
 
     //Call getnodes
-    public String getNodes(double lat, double lng, int choice)
+    public String getNodes(double lat, double lng, double range, int choice)//range in miles
 
     {
         long arr[] = new long[nodecount];
@@ -135,20 +137,38 @@ public class Network {
             lat2 = getLat(arr[i]);
             lon2 = getLon(arr[i]);
             double checkdis = hav.Havdistance(lat1, lon1, lat2, lon2);
-            if ((checkdis > 10.9) && (checkdis < 11.1)) {
+            if ((checkdis >(range-0.1))&& (checkdis < (range+0.1))) {
                 key[count] = arr[i];
 
                 count++;
             }
         }
-
-        result = arrangedCoordinate(key, choice);
+        
+        //result=selectRandomNodes(key,choice) ;
+        result=arrangedCoordinate(key, choice);
 
         return result;
     }
-
-
+    //displaying 150 markers on map.
+    //public String selectRandomNodes(long key[],int choice)
+    //{
+    //String result=null;
+   //Random random = new Random();
+   //if (count>150)
+    //count=150;//Need to reduce the number of output nodes. Currently, set at 150.
+   // long nodeArray[]=new long[count];
+   // for(int i=0;i<count;i++)
+   // {nodeArray[i]=key[random.nextInt(count-1)];
+    
+    //}
+    
+    //result = arrangedCoordinate(nodeArray, choice);
+    // result;
+    
+    //}
     public String arrangedCoordinate(long arr[], int choice) {
+       
+       
         double DistanceMatrix[][] = new double[count][count];
         int i, j;
         String result = null;

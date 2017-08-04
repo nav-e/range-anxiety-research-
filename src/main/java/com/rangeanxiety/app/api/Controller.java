@@ -16,50 +16,42 @@ public class Controller {
     @Autowired
     Network network;
 
-    @RequestMapping("/range/polygon")
+    @RequestMapping("/polygon")
     public String polygon(@RequestParam(required = false, value = "startlat") Double startlat,
                           @RequestParam(required = false, value = "startlng") Double startlng,
                           @RequestParam(required = false, value = "range") Double range) {
 
-        if (startlat == null) {
+        if ((startlat == null)&&(startlng == null)) {
             startlat = network.getRandomLat();
-        }
-
-        if (startlng == null) {
             startlng = network.getRandomLon();
         }
-
         if (range == null) {
 
-            range = 5d;
+            range = 11d;
         }
 
         String result;
-        result = network.getNodes(startlat, startlng, 1);
+        result = network.getNodes(startlat, startlng, range, 1);
         return result;
 
     }
 
-    @RequestMapping("/range/marker")
+    @RequestMapping("/marker")
     public String marker(@RequestParam(required = false, value = "startlat") Double startlat,
                          @RequestParam(required = false, value = "startlng") Double startlng,
                          @RequestParam(required = false, value = "range") Double range) {
 
-        if (startlat == null) {
+        if ((startlat == null)&&(startlng == null)) {
             startlat = network.getRandomLat();
-        }
-
-        if (startlng == null) {
             startlng = network.getRandomLon();
         }
-
         if (range == null) {
 
-            range = 5d;
+            range = 11d;
         }
 
         String result;
-        result = network.getNodes(startlat, startlng, 2);
+        result = network.getNodes(startlat, startlng, range, 2);
         return result;
 
     }
