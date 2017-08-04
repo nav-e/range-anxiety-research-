@@ -12,6 +12,7 @@ import de.topobyte.osm4j.core.access.OsmInputException;
 import de.topobyte.osm4j.pbf.seq.PbfReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import de.topobyte.osm4j.core.model.impl.Node;
 
 import java.io.*;
 import java.util.*;
@@ -33,6 +34,7 @@ public class Network {
     private int count, nodecount = 0;
     private PbfReader reader;
     private PersistingOsmHandler handler;
+    private Persistence db;
     
 
     public void readOSMFile() throws FileNotFoundException {
@@ -40,7 +42,7 @@ public class Network {
         
         reader = new PbfReader(filename, false);
         
-        Persistence db = new InMemoryPersistence();
+        db = new InMemoryPersistence();
        
 
         handler = new PersistingOsmHandler(db);
@@ -56,17 +58,17 @@ public class Network {
     }
 
 
-    public long[] getRandomVertexId() {
+    public long[] getVertexId() {
 
-        Random random = new Random();
+        
         List<Long> keys = new ArrayList<Long>(vertices.keySet());
         long arr[] = new long[nodecount];
-        int i;
+        int i=0;
 
         String result = null;
-        for (i = 0; i < nodecount; i++) {
-            long randomKey = keys.get(random.nextInt(keys.size()));
-            arr[i] = randomKey;
+        for (Long key: keys) {
+            arr[i] = key;
+            i++;
         }
         return arr;
     }
@@ -124,11 +126,42 @@ public class Network {
         long arr[] = new long[nodecount];
         long key[] = new long[nodecount];
         String result = null;
-        arr = getRandomVertexId();
+        arr = getVertexId();
 
         double lat1, lon1;
         lat1 = lat;
         lon1 = lng;
+
+        count = 0;
+        double lat2, lon2;
+
+        for (int i = 0; i < nodecount; i++) {
+            lat2 = getLat(arr[i]);
+            lon2 = getLon(arr[i]);
+            double checkdis = hav.Havdistance(lat1, lon1, lat2, lon2);
+            if ((checkdis >(range-0.1))&& (checkdis < (range+0.1))) {
+                key[count] = arr[i];
+
+                count++;
+            }
+        }
+        
+        //result=selectRandomNodes(key,choice) ;
+        result=arrangedCoordinate(key, choice);
+
+        return result;
+    }
+    public String getNodes(long nodeId, double range, int choice)//range in miles
+
+    {   Node startNode = db.getNodeById(nodeId);
+        long arr[] = new long[nodecount];
+        long key[] = new long[nodecount];
+        String result = null;
+        arr = getVertexId();
+
+        double lat1, lon1;
+        lat1 = startNode.getLatitude();
+        lon1 = startNode.getLongitude();
 
         count = 0;
         double lat2, lon2;

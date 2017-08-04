@@ -19,19 +19,28 @@ public class Controller {
     @RequestMapping("/polygon")
     public String polygon(@RequestParam(required = false, value = "startlat") Double startlat,
                           @RequestParam(required = false, value = "startlng") Double startlng,
-                          @RequestParam(required = false, value = "range") Double range) {
-
-        if ((startlat == null)&&(startlng == null)) {
-            startlat = network.getRandomLat();
-            startlng = network.getRandomLon();
-        }
+                          @RequestParam(required = false, value = "range") Double range,
+                          @RequestParam(required = false, value = "startNode") Long startNode) {
+        String result;
         if (range == null) {
 
             range = 11d;
         }
+        
+        if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
+            startlat = network.getRandomLat();
+            startlng = network.getRandomLon();
+            result = network.getNodes(startlat, startlng, range, 1);
+        }
+        else if ((startlat != null)&&(startlng != null)){
+        result = network.getNodes(startlat, startlng, range, 1);}
+        
+        else {result = network.getNodes(startNode, range, 1);}
+        
+        
 
-        String result;
-        result = network.getNodes(startlat, startlng, range, 1);
+        
+        
         return result;
 
     }
@@ -39,25 +48,28 @@ public class Controller {
     @RequestMapping("/marker")
     public String marker(@RequestParam(required = false, value = "startlat") Double startlat,
                          @RequestParam(required = false, value = "startlng") Double startlng,
-                         @RequestParam(required = false, value = "range") Double range) {
-
-        if ((startlat == null)&&(startlng == null)) {
-            startlat = network.getRandomLat();
-            startlng = network.getRandomLon();
-        }
+                         @RequestParam(required = false, value = "range") Double range,
+                         @RequestParam(required = false, value = "startNode") Long startNode) {
+        String result;
         if (range == null) {
 
             range = 11d;
         }
-
-        String result;
-        result = network.getNodes(startlat, startlng, range, 2);
+        
+        if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
+            startlat = network.getRandomLat();
+            startlng = network.getRandomLon();
+            result = network.getNodes(startlat, startlng, range, 2);
+        }
+        else if ((startlat != null)&&(startlng != null)){
+        result = network.getNodes(startlat, startlng, range, 2);}
+        
+        else {result = network.getNodes(startNode, range, 2);}
+        
         return result;
 
-    }
 
-
-}
+}}
 
 
 
