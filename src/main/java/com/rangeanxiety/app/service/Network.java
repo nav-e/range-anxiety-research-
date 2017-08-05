@@ -162,6 +162,7 @@ public class Network {
         double lat1, lon1;
         lat1 = startNode.getLatitude();
         lon1 = startNode.getLongitude();
+        
 
         count = 0;
         double lat2, lon2;
