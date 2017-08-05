@@ -16,9 +16,9 @@ $ java -jar range-1.0-SNAPSHOT.jar
 Working Example:
 
 To get the polygon format, click on the links below.
-navigate to 'http://localhost:8111/greennav/polygon?startlat=31.7239898&startlng=35.6429683&range=10.0' or 'http://localhost:8111/greennav/polygon?startNode=3602680930&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
+Navigate to 'http://localhost:8111/greennav/polygon?startlat=31.7239898&startlng=35.6429683&range=10.0' or 'http://localhost:8111/greennav/polygon?startNode=3602680930&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
 
 To get the marker format, click on the links below.
-navigate to 'http://localhost:8111/greennav/marker?startlat=31.7239898&startlng=35.6429683&range=10.0' or 'http://localhost:8111/greennav/marker?startNode=3602680930&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
+Navigate to 'http://localhost:8111/greennav/marker?startlat=31.7239898&startlng=35.6429683&range=10.0' or 'http://localhost:8111/greennav/marker?startNode=3602680930&range=10.0' to get a valid JSON output that can be used directly in any map editor without any further rearrangement.
 
 For more details, read 'results2.pdf'. 
