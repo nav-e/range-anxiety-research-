@@ -2,7 +2,8 @@
 
 Computation and visualization of the vehicle's range.
 
-Given initial Latitude and Longitude, or OSM Node Id, and range value, outputs a list of nodes forming the edges of a polygon. If sucessful, the API will return a JSON Object following the [GeoJSON](http://geojson.org/) format specification.
+Given initial Latitude and Longitude, or OSM Node Id, and range value, outputs a list of nodes forming the edges of a [polygon](https://gist.github.com/bfmags/6cd82eaf4270a9657ff7b1301e51d574) or a group of [markers](https://gist.github.com/bfmags/6a7ef7cfd080460e3c18578476bbcae4), with a rest endpoint for both requests.
+If sucessful, the API will return a JSON Object following the [GeoJSON](http://geojson.org/) format specification.
 
 See below for examples of how to use the API.
 
