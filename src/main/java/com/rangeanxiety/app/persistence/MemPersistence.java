@@ -7,7 +7,7 @@ import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 
 import java.util.*;
 
-public class InMemoryPersistence implements Persistence {
+public class MemPersistence implements Persistence {
     private final Map<Long, Node> nodes = new HashMap<>();
     private final Map<Long, Way> ways = new HashMap<>();
     private final Map<Long, Relation> relations = new HashMap<>();

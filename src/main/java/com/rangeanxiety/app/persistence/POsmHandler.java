@@ -13,12 +13,12 @@ import de.topobyte.osm4j.core.model.impl.Way;
 
 import java.io.IOException;
 
-public class PersistingOsmHandler implements OsmHandler {
+public class POsmHandler implements OsmHandler {
     public int numNodes = 0;
     public Multimap<Long, Double> ver = ArrayListMultimap.create();
     private Persistence persistence;
 
-    public PersistingOsmHandler(Persistence persistence) {
+    public POsmHandler(Persistence persistence) {
         this.persistence = persistence;
     }
 

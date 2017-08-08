@@ -5,9 +5,9 @@ import com.google.common.collect.Multimap;
 import com.rangeanxiety.app.api.Marker;
 import com.rangeanxiety.app.api.Polygon;
 import com.rangeanxiety.app.helper.Haversine;
-import com.rangeanxiety.app.persistence.InMemoryPersistence;
+import com.rangeanxiety.app.persistence.MemPersistence;
 import com.rangeanxiety.app.persistence.Persistence;
-import com.rangeanxiety.app.persistence.PersistingOsmHandler;
+import com.rangeanxiety.app.persistence.POsmHandler;
 import de.topobyte.osm4j.core.access.OsmInputException;
 import de.topobyte.osm4j.pbf.seq.PbfReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class Network {
     private long vertexKey;
     private int count, nodecount = 0;
     private PbfReader reader;
-    private PersistingOsmHandler handler;
+    private POsmHandler handler;
     private Persistence db;
     
 
@@ -42,10 +42,10 @@ public class Network {
         
         reader = new PbfReader(filename, false);
         
-        db = new InMemoryPersistence();
+        db = new MemPersistence();
        
 
-        handler = new PersistingOsmHandler(db);
+        handler = new POsmHandler(db);
         reader.setHandler(handler);
         try {
             reader.read();
@@ -131,6 +131,7 @@ public class Network {
         double lat1, lon1;
         lat1 = lat;
         lon1 = lng;
+        
 
         count = 0;
         double lat2, lon2;
@@ -146,14 +147,17 @@ public class Network {
             }
         }
         
-        //result=selectRandomNodes(key,choice) ;
+        
         result=arrangedCoordinate(key, choice);
 
         return result;
     }
-    public String getNodes(long nodeId, double range, int choice)//range in miles
+    public String getNodes(long nodeId, double range, int choice)//range in Miles
 
     {   Node startNode = db.getNodeById(nodeId);
+        if (startNode == null) 
+        {return null;}
+        else{
         long arr[] = new long[nodecount];
         long key[] = new long[nodecount];
         String result = null;
@@ -178,28 +182,12 @@ public class Network {
             }
         }
         
-        //result=selectRandomNodes(key,choice) ;
+        
         result=arrangedCoordinate(key, choice);
 
         return result;
-    }
-    //displaying 150 markers on map.
-    //public String selectRandomNodes(long key[],int choice)
-    //{
-    //String result=null;
-   //Random random = new Random();
-   //if (count>150)
-    //count=150;//Need to reduce the number of output nodes. Currently, set at 150.
-   // long nodeArray[]=new long[count];
-   // for(int i=0;i<count;i++)
-   // {nodeArray[i]=key[random.nextInt(count-1)];
-    
-    //}
-    
-    //result = arrangedCoordinate(nodeArray, choice);
-    // result;
-    
-    //}
+    }}
+   
     public String arrangedCoordinate(long arr[], int choice) {
        
        
@@ -276,7 +264,9 @@ public class Network {
             }
             stack.pop();
         }
-
+        
+        if (newarr == null){
+        return null;}
         switch (choice) {
             case 1:
                 result = polygon.convertToJSONpolygon(newarr, count);
