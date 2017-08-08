@@ -37,9 +37,13 @@ public class Controller {
             result = network.getNodes(startlat, startlng, range, 1);
         }
         else if ((startlat != null)&&(startlng != null)){
-        result = network.getNodes(startlat, startlng, range, 1);}
+        result = network.getNodes(startlat, startlng, range, 1);
+        if (result==null){
+           throw new coordinateException();}}
         
-        else {result = network.getNodes(startNode, range, 1);}
+        else {result = network.getNodes(startNode, range, 1);
+        if (result==null)
+           throw new nodeIdException();}
         
         
 
