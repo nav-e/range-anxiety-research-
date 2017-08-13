@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+
 @SpringBootApplication
 public class Application {
 
@@ -16,7 +17,7 @@ public class Application {
     @Bean
     public InitializingBean init(Network network) {
         // Starts the initialization of the routing network
-        // Please provide file 'test.osm.pbf' on the working directory
+        // Please provide file 'Jordan.osm.pbf' on the working directory
         return network::readOSMFile;
     }
 

@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.HttpStatus;
 import de.topobyte.osm4j.core.model.impl.Node;
 
 
 @RestController
+//@CrossOrigin(origins = "http://localhost:9000")
 @RequestMapping("/greennav")
 
 
@@ -32,8 +34,8 @@ public class Controller {
         }
         
         if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
-            startlat = network.getRandomLat();
             startlng = network.getRandomLon();
+            startlat = network.getRandomLat();
             result = network.getNodes(startlat, startlng, range, 1);
         }
         else if ((startlat != null)&&(startlng != null)){
