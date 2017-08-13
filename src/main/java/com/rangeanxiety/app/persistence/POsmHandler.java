@@ -30,8 +30,8 @@ public class POsmHandler implements OsmHandler {
     public void handle(OsmNode node) throws IOException {
         numNodes++;
         persistence.writeNode((Node) node);
-        ver.put(node.getId(), node.getLatitude());
         ver.put(node.getId(), node.getLongitude());
+        ver.put(node.getId(), node.getLatitude());
     }
 
     @Override

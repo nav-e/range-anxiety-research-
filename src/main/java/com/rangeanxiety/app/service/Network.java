@@ -73,50 +73,50 @@ public class Network {
         return arr;
     }
 
-    public double getRandomLat() {
+    public double getRandomLon() {
 
-        double lat;
+        double lon;
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(vertices.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
-        System.out.println("Random key "+randomKey);
+        
         vertexKey = randomKey;
         Collection<Double> coor = vertices.get(vertexKey);
-        lat = coor.iterator().next();
-        System.out.println("Latitude "+lat);
-        return lat;
-    }
-
-
-    public double getRandomLon() {
-
-        double lat, lon;
-        Collection<Double> coor = vertices.get(vertexKey);
-        lat = coor.iterator().next();
-        Iterator<Double> iter = coor.iterator();
-        iter.next();
-        lon = iter.next();
+        lon = coor.iterator().next();
         System.out.println("Longitude "+lon);
-
         return lon;
     }
 
-    public double getLat(long key) {
-        double lat;
-        Collection<Double> coor = vertices.get(key);
-        lat = coor.iterator().next();
-        
+
+    public double getRandomLat() {
+
+        double lat, lon;
+        Collection<Double> coor = vertices.get(vertexKey);
+        lon = coor.iterator().next();
+        Iterator<Double> iter = coor.iterator();
+        iter.next();
+        lat = iter.next();
+        System.out.println("Latitude "+lat);
+
         return lat;
     }
 
     public double getLon(long key) {
+        double lon;
+        Collection<Double> coor = vertices.get(key);
+        lon = coor.iterator().next();
+        
+        return lon;
+    }
+
+    public double getLat(long key) {
         double lon, lat;
         Collection<Double> coor = vertices.get(key);
-        lat = coor.iterator().next();
+        lon = coor.iterator().next();
         Iterator<Double> iter = coor.iterator();
         iter.next();
-        lon = iter.next();
-        return lon;
+        lat = iter.next();
+        return lat;
     }
 
     //Call getnodes

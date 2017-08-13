@@ -65,8 +65,8 @@ public class Controller {
         }
         
         if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
-            startlat = network.getRandomLat();
             startlng = network.getRandomLon();
+            startlat = network.getRandomLat();
             result = network.getNodes(startlat, startlng, range, 2);
         }
         else if ((startlat != null)&&(startlng != null)){

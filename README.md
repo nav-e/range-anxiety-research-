@@ -30,13 +30,13 @@ Move the Jordan.osm.pbf file to the target folder.
 Examples below use Jordan.osm.pbf for the map data.
 Returns valid JSON output that can be used directly in any map editor without any further rearrangement.
 
-To get the polygon format, using either lat/lng or OSM Node Id parameters.
+To get the polygon format, using either lng/lat or OSM Node Id parameters.
 
 * ```http://localhost:8111/greennav/polygon?startlat=31.7239898&startlng=35.6429683&range=10.0```
 * ```http://localhost:8111/greennav/polygon?startNode=3602680930&range=10.0```
 
 
-To get the marker format, using either lat/lng or OSM Node Id parameters.
+To get the marker format, using either lng/lat or OSM Node Id parameters.
 
 * ```http://localhost:8111/greennav/marker?startlat=31.7239898&startlng=35.6429683&range=10.0```
 * ```http://localhost:8111/greennav/marker?startNode=3602680930&range=10.0```
