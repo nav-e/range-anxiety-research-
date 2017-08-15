@@ -13,7 +13,7 @@ import de.topobyte.osm4j.core.model.impl.Node;
 
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:9000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/greennav")
 
 
