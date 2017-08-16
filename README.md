@@ -25,7 +25,30 @@ Move the Jordan.osm.pbf file to the target folder.
 
 ```$ java -jar range-1.0-SNAPSHOT.jar```
 
-### Working Example
+## Docker Setup
+
+[Docker](https://www.docker.com/) allows packaging an application with all of its dependencies into a container.
+
+```zsh
+git clone https://github.com/Greennav/range-anxiety.git
+cd range-anxiety
+```
+
+#### Build
+We will start by building a Docker image for the application (```Dockerfile``` contains the command-line instructions).
+
+```
+docker build -t greennav-range-api .
+```
+
+##### Run
+Finally we run the image as a container, making the Range API available at http://localhost:8111/.
+
+```
+docker run -d --rm -p 8111:8111 --name greennav-range-api greennav-range-api:latest
+```
+
+## Working Example
 
 Examples below use Jordan.osm.pbf for the map data.
 Returns valid JSON output that can be used directly in any map editor without any further rearrangement.
@@ -43,4 +66,4 @@ To get the marker format, using either lat/lng or OSM Node Id parameters.
 
 ______
 
-For more details, read 'results2.pdf' available in the docs folder. 
+For more details, read 'results2.pdf' available in the docs folder.
