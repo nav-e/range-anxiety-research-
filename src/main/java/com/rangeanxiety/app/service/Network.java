@@ -287,8 +287,7 @@ public class Network {
         Integer [] intarr = res.toArray(new Integer[res.size()]);
         
         long[] longArray = Arrays.stream(intarr).mapToLong(q -> q).toArray();
-        for (j = 0; j < count; j++) {
-            System.out.println(newarr[(int)longArray[j]]);}
+        
             
         for (int k=0;k<count;k++)
         {passArray[k]=newarr[(int)longArray[k]];}    
