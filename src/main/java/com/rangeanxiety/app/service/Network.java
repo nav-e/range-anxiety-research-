@@ -266,12 +266,11 @@ public class Network {
             stack.pop();
         }
         
-        if (count>150)
-        count=150;
+        
      
         List<Integer> coor = new ArrayList<Integer>();
         List<Integer> res = new ArrayList<Integer>();
-        long passArray [] =new long[count];
+        
         int j;
         
         for( j = 0; j <count; j++) {
@@ -279,6 +278,9 @@ public class Network {
         }
 
         Collections.shuffle(coor); 
+        if (count>150)
+        count=150;
+        long passArray [] =new long[count];
         for (j = 0; j < count; j++) {
             
             res.add(coor.get(j));
