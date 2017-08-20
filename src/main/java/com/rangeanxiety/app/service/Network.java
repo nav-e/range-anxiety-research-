@@ -13,6 +13,7 @@ import de.topobyte.osm4j.pbf.seq.PbfReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import de.topobyte.osm4j.core.model.impl.Node;
+import java.util.Collections;
 
 import java.io.*;
 import java.util.*;
@@ -265,14 +266,41 @@ public class Network {
             stack.pop();
         }
         
-        if (newarr == null){
+        if (count>150)
+        count=150;
+     
+        List<Integer> coor = new ArrayList<Integer>();
+        List<Integer> res = new ArrayList<Integer>();
+        long passArray [] =new long[count];
+        int j;
+        
+        for( j = 0; j <count; j++) {
+            coor.add(j);
+        }
+
+        Collections.shuffle(coor); 
+        for (j = 0; j < count; j++) {
+            
+            res.add(coor.get(j));
+        }
+        Collections.sort(res);
+        Integer [] intarr = res.toArray(new Integer[res.size()]);
+        
+        long[] longArray = Arrays.stream(intarr).mapToLong(q -> q).toArray();
+        for (j = 0; j < count; j++) {
+            System.out.println(newarr[(int)longArray[j]]);}
+            
+        for (int k=0;k<count;k++)
+        {passArray[k]=newarr[(int)longArray[k]];}    
+        
+        if (passArray == null){
         return null;}
         switch (choice) {
             case 1:
-                result = polygon.convertToJSONpolygon(newarr, count);
+                result = polygon.convertToJSONpolygon(passArray, count);
                 break;
             case 2:
-                result = marker.convertToJSONmarker(newarr, count);
+                result = marker.convertToJSONmarker(passArray, count);
                 break;
             default:
                 break;
