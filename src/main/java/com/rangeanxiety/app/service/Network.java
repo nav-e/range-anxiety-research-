@@ -35,15 +35,15 @@ public class Network {
     private PbfReader reader;
     private POsmHandler handler;
     private Persistence db;
-    
+
 
     public void readOSMFile() throws FileNotFoundException {
         String filename = "Jordan.osm.pbf";
-        
+
         reader = new PbfReader(filename, false);
-        
+
         db = new MemPersistence();
-       
+
 
         handler = new POsmHandler(db);
         reader.setHandler(handler);
@@ -51,7 +51,7 @@ public class Network {
             reader.read();
             nodecount = handler.numNodes;
             vertices = handler.ver;
-            
+
         } catch (OsmInputException e) {
         }
 
@@ -60,13 +60,13 @@ public class Network {
 
     public long[] getVertexId() {
 
-        
+
         List<Long> keys = new ArrayList<Long>(vertices.keySet());
         long arr[] = new long[nodecount];
-        int i=0;
+        int i = 0;
 
         String result = null;
-        for (Long key: keys) {
+        for (Long key : keys) {
             arr[i] = key;
             i++;
         }
@@ -79,11 +79,11 @@ public class Network {
         Random random = new Random();
         List<Long> keys = new ArrayList<Long>(vertices.keySet());
         long randomKey = keys.get(random.nextInt(keys.size()));
-        System.out.println("Random key "+randomKey);
+        System.out.println("Random key " + randomKey);
         vertexKey = randomKey;
         Collection<Double> coor = vertices.get(vertexKey);
         lat = coor.iterator().next();
-        System.out.println("Latitude "+lat);
+        System.out.println("Latitude " + lat);
         return lat;
     }
 
@@ -96,7 +96,7 @@ public class Network {
         Iterator<Double> iter = coor.iterator();
         iter.next();
         lon = iter.next();
-        System.out.println("Longitude "+lon);
+        System.out.println("Longitude " + lon);
 
         return lon;
     }
@@ -105,7 +105,7 @@ public class Network {
         double lat;
         Collection<Double> coor = vertices.get(key);
         lat = coor.iterator().next();
-        
+
         return lat;
     }
 
@@ -131,7 +131,7 @@ public class Network {
         double lat1, lon1;
         lat1 = lat;
         lon1 = lng;
-        
+
 
         count = 0;
         double lat2, lon2;
@@ -140,57 +140,60 @@ public class Network {
             lat2 = getLat(arr[i]);
             lon2 = getLon(arr[i]);
             double checkdis = hav.Havdistance(lat1, lon1, lat2, lon2);
-            if ((checkdis >(range-0.1))&& (checkdis < (range+0.1))) {
+            if ((checkdis > (range - 0.1)) && (checkdis < (range + 0.1))) {
                 key[count] = arr[i];
 
                 count++;
             }
         }
-        
-        
-        result=arrangedCoordinate(key, choice);
+
+
+        result = arrangedCoordinate(key, choice);
 
         return result;
     }
+
     public String getNodes(long nodeId, double range, int choice)//range in Miles
 
-    {   Node startNode = db.getNodeById(nodeId);
-        if (startNode == null) 
-        {return null;}
-        else{
-        long arr[] = new long[nodecount];
-        long key[] = new long[nodecount];
-        String result = null;
-        arr = getVertexId();
+    {
+        Node startNode = db.getNodeById(nodeId);
+        if (startNode == null) {
+            return null;
+        } else {
+            long arr[] = new long[nodecount];
+            long key[] = new long[nodecount];
+            String result = null;
+            arr = getVertexId();
 
-        double lat1, lon1;
-        lat1 = startNode.getLatitude();
-        lon1 = startNode.getLongitude();
-        
+            double lat1, lon1;
+            lat1 = startNode.getLatitude();
+            lon1 = startNode.getLongitude();
 
-        count = 0;
-        double lat2, lon2;
 
-        for (int i = 0; i < nodecount; i++) {
-            lat2 = getLat(arr[i]);
-            lon2 = getLon(arr[i]);
-            double checkdis = hav.Havdistance(lat1, lon1, lat2, lon2);
-            if ((checkdis >(range-0.1))&& (checkdis < (range+0.1))) {
-                key[count] = arr[i];
+            count = 0;
+            double lat2, lon2;
 
-                count++;
+            for (int i = 0; i < nodecount; i++) {
+                lat2 = getLat(arr[i]);
+                lon2 = getLon(arr[i]);
+                double checkdis = hav.Havdistance(lat1, lon1, lat2, lon2);
+                if ((checkdis > (range - 0.1)) && (checkdis < (range + 0.1))) {
+                    key[count] = arr[i];
+
+                    count++;
+                }
             }
-        }
-        
-        
-        result=arrangedCoordinate(key, choice);
 
-        return result;
-    }}
-   
+
+            result = arrangedCoordinate(key, choice);
+
+            return result;
+        }
+    }
+
     public String arrangedCoordinate(long arr[], int choice) {
-       
-       
+
+
         double DistanceMatrix[][] = new double[count][count];
         int i, j;
         String result = null;
@@ -264,15 +267,41 @@ public class Network {
             }
             stack.pop();
         }
-        
-        if (newarr == null){
-        return null;}
+
+
+        int len = 1;
+        long longArr[] = new long[count];
+        int index = 0, c = 0;
+        longArr[0] = newarr[0];
+        double lat1, lon1, lat2, lon2;
+        while ((len) < count) {
+            lat1 = getLat(newarr[index]);
+            lon1 = getLon(newarr[index]);
+            lat2 = getLat(newarr[len]);
+            lon2 = getLon(newarr[len]);
+            double distance = hav.Havdistance(lat1, lon1, lat2, lon2);
+
+            if (distance < 1) {
+                len++;
+
+            } else {
+                longArr[++c] = newarr[len];
+                index = len;
+                len++;
+
+            }
+        }
+
+
+        if (newarr == null) {
+            return null;
+        }
         switch (choice) {
             case 1:
-                result = polygon.convertToJSONpolygon(newarr, count);
+                result = polygon.convertToJSONpolygon(longArr, c + 1);
                 break;
             case 2:
-                result = marker.convertToJSONmarker(newarr, count);
+                result = marker.convertToJSONmarker(longArr, c + 1);
                 break;
             default:
                 break;

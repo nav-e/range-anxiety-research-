@@ -30,25 +30,23 @@ public class Controller {
 
             range = 11d;
         }
-        
-        if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
+
+        if ((startlat == null) && (startlng == null) && (startNode == null)) {
             startlat = network.getRandomLat();
             startlng = network.getRandomLon();
             result = network.getNodes(startlat, startlng, range, 1);
+        } else if ((startlat != null) && (startlng != null)) {
+            result = network.getNodes(startlat, startlng, range, 1);
+            if (result == null) {
+                throw new coordinateException();
+            }
+        } else {
+            result = network.getNodes(startNode, range, 1);
+            if (result == null)
+                throw new nodeIdException();
         }
-        else if ((startlat != null)&&(startlng != null)){
-        result = network.getNodes(startlat, startlng, range, 1);
-        if (result==null){
-           throw new coordinateException();}}
-        
-        else {result = network.getNodes(startNode, range, 1);
-        if (result==null)
-           throw new nodeIdException();}
-        
-        
 
-        
-        
+
         return result;
 
     }
@@ -63,36 +61,37 @@ public class Controller {
 
             range = 11d;
         }
-        
-        if ((startlat == null)&&(startlng == null)&&(startNode == null)) {
+
+        if ((startlat == null) && (startlng == null) && (startNode == null)) {
             startlat = network.getRandomLat();
             startlng = network.getRandomLon();
             result = network.getNodes(startlat, startlng, range, 2);
+        } else if ((startlat != null) && (startlng != null)) {
+
+            result = network.getNodes(startlat, startlng, range, 2);
+            if (result == null) {
+                throw new coordinateException();
+            }
+        } else {
+            result = network.getNodes(startNode, range, 2);
+            if (result == null)
+                throw new nodeIdException();
         }
-        else if ((startlat != null)&&(startlng != null)){
-        
-        result = network.getNodes(startlat, startlng, range, 2);
-        if (result==null){
-           throw new coordinateException();}}
-        
-        else{result = network.getNodes(startNode, range, 2);
-        if (result==null)
-           throw new nodeIdException();}
-        
+
         return result;
 
 
-}
+    }
 
-@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Incorrect NodeId. Please enter a correct NodeId. ")
- public class nodeIdException extends RuntimeException   {
-     
- }
- 
- @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Incorrect Coordinates. Please enter correct coordinates.")
- public class coordinateException extends RuntimeException  {
-     // ...
- }
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Incorrect NodeId. Please enter a correct NodeId. ")
+    public class nodeIdException extends RuntimeException {
+
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Incorrect Coordinates. Please enter correct coordinates.")
+    public class coordinateException extends RuntimeException {
+        // ...
+    }
 }
 
 

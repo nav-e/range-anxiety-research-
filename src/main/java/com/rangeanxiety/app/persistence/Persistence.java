@@ -4,8 +4,10 @@ import de.topobyte.osm4j.core.model.impl.Node;
 import de.topobyte.osm4j.core.model.impl.Relation;
 import de.topobyte.osm4j.core.model.impl.Way;
 import org.springframework.stereotype.Repository;
+
 import java.util.Collection;
 import java.util.Set;
+
 @Repository
 public interface Persistence {
     void writeNode(Node node);
