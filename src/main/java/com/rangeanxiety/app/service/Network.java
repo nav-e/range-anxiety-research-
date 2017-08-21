@@ -266,42 +266,39 @@ public class Network {
             stack.pop();
         }
         
-        
-     
-        List<Integer> coor = new ArrayList<Integer>();
-        List<Integer> res = new ArrayList<Integer>();
-        
-        int j;
-        
-        for( j = 0; j <count; j++) {
-            coor.add(j);
-        }
+        int len = 1;
+        long longArr[] = new long[count];
+        int index = 0, c = 0;
+        longArr[0] = newarr[0];
+        double lat1, lon1, lat2, lon2;
+        while ((len) < count) {
+            lat1 = getLat(newarr[index]);
+            lon1 = getLon(newarr[index]);
+            lat2 = getLat(newarr[len]);
+            lon2 = getLon(newarr[len]);
+            double distance = hav.Havdistance(lat1, lon1, lat2, lon2);
 
-        Collections.shuffle(coor); 
-        if (count>150)
-        count=150;
-        long passArray [] =new long[count];
-        for (j = 0; j < count; j++) {
-            
-            res.add(coor.get(j));
+            if (distance < 1) {
+                len++;
+
+            } else {
+                longArr[++c] = newarr[len];
+                index = len;
+                len++;
+
+            }
         }
-        Collections.sort(res);
-        Integer [] intarr = res.toArray(new Integer[res.size()]);
+     
+          
         
-        long[] longArray = Arrays.stream(intarr).mapToLong(q -> q).toArray();
-        
-            
-        for (int k=0;k<count;k++)
-        {passArray[k]=newarr[(int)longArray[k]];}    
-        
-        if (passArray == null){
+        if (newarr == null){
         return null;}
         switch (choice) {
             case 1:
-                result = polygon.convertToJSONpolygon(passArray, count);
+                result = polygon.convertToJSONpolygon(longArr, c+1);
                 break;
             case 2:
-                result = marker.convertToJSONmarker(passArray, count);
+                result = marker.convertToJSONmarker(longArr, c+1);
                 break;
             default:
                 break;
