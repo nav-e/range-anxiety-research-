@@ -1,7 +1,7 @@
 ## Google Summer of Code 2017
 # Implementing Range Anxiety, by Leah Chrestien
 
-**Category:** Frontend  
+**Category:** Algorithm  
 **Mentors:** Bruno Magalhaes, René Schönfelder
 
   * #### [Get code on github](https://github.com/Greennav/range-anxiety)
@@ -9,6 +9,7 @@
   * #### [Project Kanban Board](https://github.com/orgs/Greennav/projects/2)
 
 ## Overview
+
 
 
 
@@ -23,7 +24,7 @@
   * [Objectives of the Range Anxiety project](https://github.com/Greennav/range-anxiety/blob/master/docs/report1.pdf)
   * [Algorithm summary, Travelling Salesman](https://github.com/Greennav/range-anxiety/blob/master/docs/report2.pdf)
   * [Results: GeoJSON output and polygon](https://github.com/Greennav/range-anxiety/blob/master/docs/results1.pdf)
-  * [Results: API Demonstration](https://github.com/Greennav/range-anxiety/blob/master/docs/results1.pdf)
+  * [Results: API Demonstration](https://github.com/Greennav/range-anxiety/blob/master/docs/results2.pdf)
   * [Algorithm Performance and Time Complexity](https://github.com/Greennav/range-anxiety/blob/master/docs/FinalReport.pdf)
 
 ## What's left to do
