@@ -4,9 +4,11 @@
 **Category:** Algorithm  
 **Mentors:** Bruno Magalhaes, René Schönfelder
 
-  * #### [Get code on github](https://github.com/Greennav/range-anxiety)
-
-  * #### [Project Kanban Board](https://github.com/orgs/Greennav/projects/2)
+  * #### [Repository](https://github.com/Greennav/range-anxiety)
+  
+  * #### [Commits](https://github.com/Greennav/range-anxiety)
+  
+  * #### [Kanban Board](https://github.com/orgs/Greennav/projects/2)
 
 ## Overview
 
@@ -18,8 +20,6 @@
 [A Medication for e-range anxiety](https://summerofcode.withgoogle.com/serve/4562469270847488/)
 
 ## Reports
-
-[Reports and Results -- PDF format](https://github.com/Greennav/range-anxiety/tree/master/docs)
 
   * [Objectives of the Range Anxiety project](https://github.com/Greennav/range-anxiety/blob/master/docs/report1.pdf)
   * [Algorithm summary, Travelling Salesman](https://github.com/Greennav/range-anxiety/blob/master/docs/report2.pdf)
