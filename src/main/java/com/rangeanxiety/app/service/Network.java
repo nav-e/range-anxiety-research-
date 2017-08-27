@@ -269,28 +269,7 @@ public class Network {
         }
 
 
-        int len = 1;
-        long longArr[] = new long[count];
-        int index = 0, c = 0;
-        longArr[0] = newarr[0];
-        double lat1, lon1, lat2, lon2;
-        while ((len) < count) {
-            lat1 = getLat(newarr[index]);
-            lon1 = getLon(newarr[index]);
-            lat2 = getLat(newarr[len]);
-            lon2 = getLon(newarr[len]);
-            double distance = hav.Havdistance(lat1, lon1, lat2, lon2);
-
-            if (distance < 1) {
-                len++;
-
-            } else {
-                longArr[++c] = newarr[len];
-                index = len;
-                len++;
-
-            }
-        }
+       
 
 
         if (newarr == null) {
@@ -298,10 +277,10 @@ public class Network {
         }
         switch (choice) {
             case 1:
-                result = polygon.convertToJSONpolygon(longArr, c + 1);
+                result = polygon.convertToJSONpolygon(newarr, count);
                 break;
             case 2:
-                result = marker.convertToJSONmarker(longArr, c + 1);
+                result = marker.convertToJSONmarker(newarr, count);
                 break;
             default:
                 break;
